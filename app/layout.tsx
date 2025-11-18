@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "AI集成编辑器",
+    title: "AI Smart Draw",
     description: "An AI-powered drawing tool that integrates with draw.io, Excalidraw, PlantUML and more",
 };
 
