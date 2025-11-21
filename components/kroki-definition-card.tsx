@@ -4,19 +4,19 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ClipboardCopy, ClipboardCheck, RefreshCcw } from "lucide-react";
-import {copyToClipboard} from "@/components/plantuml-definition-card";
+import { copyToClipboard } from "@/components/plantuml-definition-card";
 
-interface MermaidDefinitionCardProps {
+interface KrokiDefinitionCardProps {
     definition: string;
     onDefinitionChange?: (definition: string) => void;
     onReset?: () => void;
 }
 
-export function MermaidDefinitionCard({
+export function KrokiDefinitionCard({
     definition,
     onDefinitionChange,
     onReset,
-}: MermaidDefinitionCardProps) {
+}: KrokiDefinitionCardProps) {
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
@@ -35,7 +35,7 @@ export function MermaidDefinitionCard({
         <div className="bg-white rounded-lg border shadow-sm flex flex-col h-full">
             <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/40">
                 <div>
-                    <p className="text-sm font-medium">Mermaid 定义</p>
+                    <p className="text-sm font-medium">Kroki 定义</p>
                     <p className="text-xs text-muted-foreground">
                         调整代码进行实时预览
                     </p>
@@ -72,13 +72,13 @@ export function MermaidDefinitionCard({
                 <Textarea
                     value={definition}
                     onChange={(event) => onDefinitionChange?.(event.target.value)}
-                    placeholder="Ask the assistant for a diagram or type Mermaid markup directly..."
-                    className="flex-1 min-h-0 text-xs resize-none bg-white/70 focus-visible:ring-2 overflow-auto"
+                    placeholder="Enter diagram definition using any supported format (PlantUML, Mermaid, BPMN, Graphviz, etc.)..."
+                    className="flex-1 min-h-0 text-xs resize-none bg-white/70 focus-visible:ring-2 overflow-auto font-mono"
                     spellCheck={false}
                     disabled={!onDefinitionChange}
                 />
                 <p className="text-[11px] text-muted-foreground">
-                    变更的 Mermaid 渲染器实时同步
+                    变更的 Kroki 渲染器实时同步
                 </p>
             </div>
         </div>

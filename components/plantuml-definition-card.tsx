@@ -36,7 +36,7 @@ export function PlantUMLDefinitionCard({
                 <div>
                     <p className="text-sm font-medium">PlantUML 定义</p>
                     <p className="text-xs text-muted-foreground">
-                        编辑代码片段可以立即刷新预览。
+                        调整代码进行实时预览
                     </p>
                 </div>
                 <div className="flex gap-2">
@@ -78,7 +78,7 @@ export function PlantUMLDefinitionCard({
                     disabled={!onDefinitionChange}
                 />
                 <p className="text-[11px] text-muted-foreground">
-                    变更的 PlantUML 渲染器实时同步。
+                    变更的 PlantUML 渲染器实时同步
                 </p>
             </div>
         </div>

@@ -14,7 +14,7 @@ import { DefaultChatTransport } from "ai";
 import { ChatInput } from "@/components/chat-input";
 import { PlantUMLChatMessageDisplay } from "./plantuml-chat-message-display";
 import { usePlantUML } from "@/contexts/plantuml-context";
-import { ModeNav } from "@/components/mode-nav";
+import { ModeSelector } from "@/components/mode-selector";
 import { ModelConfigDialog } from "@/components/model-config-dialog";
 import { useModelConfig } from "@/contexts/model-config-context";
 
@@ -91,15 +91,12 @@ export default function PlantUMLChatPanel() {
     };
 
     return (
-        <Card className="h-full flex flex-col rounded-none py-0 gap-0">
+        <Card className="h-full flex flex-col rounded-none py-0 gap-0 overflow-hidden">
             <CardHeader className="p-4 flex flex-col gap-2">
-                <div className="flex justify-between items-center gap-4">
-                    <CardTitle className="text-lg font-semibold">
-                        PlantUML
-                    </CardTitle>
-                    <div className="flex gap-2 flex-wrap justify-end">
+                <div className="flex items-center justify-between gap-2">
+                    <div className="flex gap-2 items-center">
+                        <ModeSelector active="plantuml" />
                         <ModelConfigDialog size="sm" />
-                        <ModeNav active="plantuml" className="flex gap-2 flex-wrap justify-end" />
                     </div>
                 </div>
             </CardHeader>

@@ -16,7 +16,7 @@ import { ChatMessageDisplay } from "./chat-message-display";
 import { useDiagram } from "@/contexts/diagram-context";
 import { replaceNodes, formatXML } from "@/lib/utils";
 import { HistoryDialog } from "@/components/history-dialog";
-import { ModeNav } from "@/components/mode-nav";
+import { ModeSelector } from "@/components/mode-selector";
 import { ModelConfigDialog } from "@/components/model-config-dialog";
 import { useModelConfig } from "@/contexts/model-config-context";
 
@@ -185,15 +185,12 @@ export default function ChatPanel() {
     };
 
     return (
-        <Card className="h-full flex flex-col rounded-none py-0 gap-0">
+        <Card className="h-full flex flex-col rounded-none py-0 gap-0 overflow-hidden">
             <CardHeader className="p-4 flex flex-col gap-2">
-                <div className="flex items-center justify-between gap-4">
-                    <CardTitle className="text-lg font-semibold">
-                        Draw.io
-                    </CardTitle>
-                    <div className="flex gap-2 flex-wrap justify-end">
+                <div className="flex items-center justify-between gap-2">
+                    <div className="flex gap-2 items-center">
+                        <ModeSelector active="drawio" />
                         <ModelConfigDialog size="sm" />
-                        <ModeNav active="drawio" className="flex gap-2 flex-wrap justify-end" />
                     </div>
                 </div>
             </CardHeader>

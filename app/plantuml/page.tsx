@@ -3,18 +3,20 @@
 import React, { useEffect, useState } from "react";
 import { PlantUMLProvider } from "@/contexts/plantuml-context";
 import { PlantUMLWorkspace } from "@/components/plantuml-workspace";
-import PlantUMLChatPanel from "@/components/plantuml-chat-panel";
+import { CollapsibleChatPanel } from "@/components/collapsible-chat-panel";
 
 export default function PlantUMLPage() {
     const [isMobile, setIsMobile] = useState(false);
+    const [isChatCollapsed, setIsChatCollapsed] = useState(false);
 
     useEffect(() => {
-        const handleResize = () => {
+        const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
         };
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
+
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
     }, []);
 
     if (isMobile) {
@@ -31,12 +33,12 @@ export default function PlantUMLPage() {
 
     return (
         <PlantUMLProvider>
-            <div className="flex h-screen bg-gray-100">
-                <div className="w-3/4 p-1 h-full">
+            <div className="flex h-screen bg-gray-100 overflow-hidden">
+                <div className={`h-full p-1 transition-all duration-300 ${isChatCollapsed ? 'w-full' : 'w-3/4'}`}>
                     <PlantUMLWorkspace />
                 </div>
-                <div className="w-1/4 h-full p-1">
-                    <PlantUMLChatPanel />
+                <div className={`h-full p-1 transition-all duration-300 ${isChatCollapsed ? 'w-0' : 'w-1/4'}`}>
+                    <CollapsibleChatPanel type="plantuml" onCollapseChange={setIsChatCollapsed} />
                 </div>
             </div>
         </PlantUMLProvider>

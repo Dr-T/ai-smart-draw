@@ -1,14 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ExcalidrawProvider } from "@/contexts/excalidraw-context";
-import { ExcalidrawWorkspace } from "@/components/excalidraw-workspace";
+import { KrokiProvider } from "@/contexts/kroki-context";
+import { KrokiWorkspace } from "@/components/kroki-workspace";
 import { CollapsibleChatPanel } from "@/components/collapsible-chat-panel";
-import { ExcalidrawHistoryDialog } from "@/components/excalidraw-history-dialog";
 
-export default function ExcalidrawPage() {
+export default function KrokiPage() {
     const [isMobile, setIsMobile] = useState(false);
-    const [showHistory, setShowHistory] = useState(false);
     const [isChatCollapsed, setIsChatCollapsed] = useState(false);
 
     useEffect(() => {
@@ -34,21 +32,15 @@ export default function ExcalidrawPage() {
     }
 
     return (
-        <ExcalidrawProvider>
+        <KrokiProvider>
             <div className="flex h-screen bg-gray-100 overflow-hidden">
                 <div className={`h-full p-1 transition-all duration-300 ${isChatCollapsed ? 'w-full' : 'w-3/4'}`}>
-                    <ExcalidrawWorkspace
-                        onRequestHistory={() => setShowHistory(true)}
-                    />
+                    <KrokiWorkspace />
                 </div>
                 <div className={`h-full p-1 transition-all duration-300 ${isChatCollapsed ? 'w-0' : 'w-1/4'}`}>
-                    <CollapsibleChatPanel type="excalidraw" onCollapseChange={setIsChatCollapsed} />
+                    <CollapsibleChatPanel type="kroki" onCollapseChange={setIsChatCollapsed} />
                 </div>
-                <ExcalidrawHistoryDialog
-                    open={showHistory}
-                    onOpenChange={setShowHistory}
-                />
             </div>
-        </ExcalidrawProvider>
+        </KrokiProvider>
     );
 }

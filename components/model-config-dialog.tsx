@@ -88,10 +88,10 @@ export function ModelConfigDialog({
                 <Button
                     variant={buttonVariant}
                     size={smallButton ? "sm" : "default"}
-                    className={cn("flex items-center gap-2", className)}
+                    className={cn("flex items-center gap-2 h-8 px-2", className)}
                 >
                     <Settings className="h-4 w-4" />
-                    <span>模型设置</span>
+                    <span className="hidden sm:inline">模型设置</span>
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-xl">

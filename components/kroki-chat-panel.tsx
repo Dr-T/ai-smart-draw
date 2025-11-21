@@ -12,14 +12,14 @@ import {
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { ChatInput } from "@/components/chat-input";
-import { MermaidChatMessageDisplay } from "@/components/mermaid-chat-message-display";
-import { useMermaid } from "@/contexts/mermaid-context";
+import { KrokiChatMessageDisplay } from "@/components/kroki-chat-message-display";
+import { useKroki } from "@/contexts/kroki-context";
 import { ModeSelector } from "@/components/mode-selector";
 import { ModelConfigDialog } from "@/components/model-config-dialog";
 import { useModelConfig } from "@/contexts/model-config-context";
 
-export default function MermaidChatPanel() {
-    const { definition, clearDefinition } = useMermaid();
+export default function KrokiChatPanel() {
+    const { definition, clearDefinition } = useKroki();
     const [files, setFiles] = useState<File[]>([]);
     const [input, setInput] = useState("");
     const { config: modelConfig } = useModelConfig();
@@ -27,14 +27,14 @@ export default function MermaidChatPanel() {
     const { messages, sendMessage, addToolResult, status, error, setMessages } =
         useChat({
             transport: new DefaultChatTransport({
-                api: "/api/mermaid",
+                api: "/api/kroki",
             }),
             async onToolCall({ toolCall }) {
-                if (toolCall.toolName === "display_mermaid") {
+                if (toolCall.toolName === "display_kroki") {
                     addToolResult({
-                        tool: "display_mermaid",
+                        tool: "display_kroki",
                         toolCallId: toolCall.toolCallId,
-                        output: "Mermaid diagram updated.",
+                        output: "Diagram updated.",
                     });
                 }
             },
@@ -76,7 +76,7 @@ export default function MermaidChatPanel() {
             setInput("");
             setFiles([]);
         } catch (err) {
-            console.error("Failed to submit Mermaid prompt:", err);
+            console.error("Failed to submit Kroki prompt:", err);
         }
     };
 
@@ -95,13 +95,13 @@ export default function MermaidChatPanel() {
             <CardHeader className="p-4 flex flex-col gap-2">
                 <div className="flex items-center justify-between gap-2">
                     <div className="flex gap-2 items-center">
-                        <ModeSelector active="mermaid" />
+                        <ModeSelector active="kroki" />
                         <ModelConfigDialog size="sm" />
                     </div>
                 </div>
             </CardHeader>
             <CardContent className="flex-grow overflow-hidden px-2">
-                <MermaidChatMessageDisplay
+                <KrokiChatMessageDisplay
                     messages={messages}
                     error={error}
                     setInput={setInput}

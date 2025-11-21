@@ -1,12 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { DrawIoEmbed } from "react-drawio";
-import ChatPanel from "@/components/chat-panel";
+import { CollapsibleChatPanel } from "@/components/collapsible-chat-panel";
 import { useDiagram } from "@/contexts/diagram-context";
 
 export default function Home() {
     const { drawioRef, handleDiagramExport } = useDiagram();
     const [isMobile, setIsMobile] = useState(false);
+    const [isChatCollapsed, setIsChatCollapsed] = useState(false);
 
     useEffect(() => {
         const checkMobile = () => {
@@ -36,8 +37,8 @@ export default function Home() {
     }
 
     return (
-        <div className="flex h-screen bg-gray-100">
-            <div className="w-3/4 p-1 h-full relative">
+        <div className="flex h-screen bg-gray-100 overflow-hidden">
+            <div className={`h-full p-1 transition-all duration-300 ${isChatCollapsed ? 'w-full' : 'w-3/4'}`}>
                 <DrawIoEmbed
                     ref={drawioRef}
                     onExport={handleDiagramExport}
@@ -49,8 +50,8 @@ export default function Home() {
                     }}
                 />
             </div>
-            <div className="w-1/4 h-full p-1">
-                <ChatPanel />
+            <div className={`h-full p-1 transition-all duration-300 ${isChatCollapsed ? 'w-0' : 'w-1/4'}`}>
+                <CollapsibleChatPanel type="drawio" onCollapseChange={setIsChatCollapsed} />
             </div>
         </div>
     );

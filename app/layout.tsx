@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { DiagramProvider } from "@/contexts/diagram-context";
 import { ModelConfigProvider } from "@/contexts/model-config-context";
+import { KrokiProvider } from "@/contexts/kroki-context";
 import "@excalidraw/excalidraw/index.css";
 
 import "./globals.css";
@@ -33,7 +34,9 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <DiagramProvider>
-                    <ModelConfigProvider>{children}</ModelConfigProvider>
+                    <ModelConfigProvider>
+                        <KrokiProvider>{children}</KrokiProvider>
+                    </ModelConfigProvider>
                 </DiagramProvider>
 
                 <Analytics />

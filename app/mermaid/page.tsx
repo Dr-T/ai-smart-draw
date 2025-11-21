@@ -3,10 +3,11 @@
 import React, { useEffect, useState } from "react";
 import { MermaidProvider } from "@/contexts/mermaid-context";
 import { MermaidWorkspace } from "@/components/mermaid-workspace";
-import MermaidChatPanel from "@/components/mermaid-chat-panel";
+import { CollapsibleChatPanel } from "@/components/collapsible-chat-panel";
 
 export default function MermaidPage() {
     const [isMobile, setIsMobile] = useState(false);
+    const [isChatCollapsed, setIsChatCollapsed] = useState(false);
 
     useEffect(() => {
         const checkMobile = () => {
@@ -32,12 +33,12 @@ export default function MermaidPage() {
 
     return (
         <MermaidProvider>
-            <div className="flex h-screen bg-gray-100">
-                <div className="w-3/4 p-1 h-full">
+            <div className="flex h-screen bg-gray-100 overflow-hidden">
+                <div className={`h-full p-1 transition-all duration-300 ${isChatCollapsed ? 'w-full' : 'w-3/4'}`}>
                     <MermaidWorkspace />
                 </div>
-                <div className="w-1/4 h-full p-1">
-                    <MermaidChatPanel />
+                <div className={`h-full p-1 transition-all duration-300 ${isChatCollapsed ? 'w-0' : 'w-1/4'}`}>
+                    <CollapsibleChatPanel type="mermaid" onCollapseChange={setIsChatCollapsed} />
                 </div>
             </div>
         </MermaidProvider>

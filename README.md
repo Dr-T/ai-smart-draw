@@ -32,6 +32,21 @@ Create UML diagrams with a built-in rendering proxy that supports plantuml.com, 
 ### Excalidraw
 Freehand-style sketching combined with AI assistance for organic diagram creation.
 
+### Kroki
+Generate diagrams in various formats using the kroki.io service with a single interface. Supports over 20 diagram types including:
+
+- **PlantUML**: UML diagrams, activity diagrams, sequence diagrams, etc.
+- **Mermaid**: Flowcharts, sequence diagrams, Gantt charts, etc.
+- **BPMN**: Business Process Modeling Notation for workflow diagrams
+- **Graphviz**: Graph visualization and network diagrams
+- **BlockDiag**: Block diagrams
+- **C4-PlantUML**: Software architecture diagrams
+- **Ditaa**: ASCII art to image conversion
+- **Erd**: Entity relationship diagrams
+- **Excalidraw**: Hand-drawn like sketches
+- **Vega/Vega-Lite**: Data visualizations
+- **And 10+ more formats**
+
 ## 🛠 How It Works
 
 AI Smart Draw leverages modern web technologies to bridge natural language and diagrammatic representations:
@@ -67,6 +82,7 @@ The application converts your natural language requests into structured diagram 
 -   **Mermaid Playground**: A dedicated `/mermaid` workspace that mirrors the Draw.io chat experience while streaming Mermaid previews and definitions
 -   **PlantUML Workspace**: Generate PlantUML snippets with live previews rendered via a configurable proxy (defaults to `plantuml.com` with automatic `kroki.io` fallback)
 -   **Excalidraw Canvas**: Freehand-style `/excalidraw` workspace that pairs the Excalidraw editor with the same chat-first workflow
+-   **Kroki Workspace**: A unified interface for generating diagrams in multiple formats using the kroki.io service
 
 ## How It Works
 
@@ -155,6 +171,7 @@ npm run dev
     - `/mermaid` -> Mermaid (live preview + definition card powered by your configured OpenAI-compatible model)
     - `/plantuml` -> PlantUML (text-based diagrams with remote preview)
     - `/excalidraw` -> Excalidraw (freeform canvas powered by the same model)
+    - `/kroki` -> Kroki (multi-format diagrams powered by kroki.io)
 
 ## Deployment
 

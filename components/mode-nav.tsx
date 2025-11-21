@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type Mode = "drawio" | "mermaid" | "plantuml" | "excalidraw";
+type Mode = "drawio" | "mermaid" | "plantuml" | "excalidraw" | "kroki";
 
 const modes: { label: string; href: string; id: Mode }[] = [
     { id: "drawio", label: "Draw.io", href: "/" },
     { id: "mermaid", label: "Mermaid", href: "/mermaid" },
     { id: "plantuml", label: "PlantUML", href: "/plantuml" },
     { id: "excalidraw", label: "Excalidraw", href: "/excalidraw" },
+    { id: "kroki", label: "Kroki", href: "/kroki" },
 ];
 
 interface ModeNavProps {
@@ -28,6 +29,8 @@ export function ModeNav({ active, className }: ModeNavProps) {
                 return "bg-purple-500 hover:bg-purple-600 text-white border-purple-600";
             case "excalidraw":
                 return "bg-orange-500 hover:bg-orange-600 text-white border-orange-600";
+            case "kroki":
+                return "bg-indigo-500 hover:bg-indigo-600 text-white border-indigo-600";
             default:
                 return "bg-gray-500 hover:bg-gray-600 text-white border-gray-600";
         }

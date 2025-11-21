@@ -13,17 +13,58 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface PlantUMLPreviewProps {
+interface KrokiPreviewProps {
     definition: string;
+    className?: string;
+    diagramType?: string;
+    onDiagramTypeChange?: (type: string) => void;
 }
+
+// Supported diagram types for the dropdown
+const DIAGRAM_TYPES = [
+    { value: "vegalite", label: "Vega-Lite" },
+    { value: "actdiag", label: "ActDiag" },
+    { value: "blockdiag", label: "BlockDiag" },
+    { value: "bpmn", label: "BPMN" },
+    { value: "bytefield", label: "Bytefield" },
+    { value: "c4plantuml", label: "C4 with PlantUML" },
+    { value: "tikz", label: "TikZ" },
+    { value: "ditaa", label: "Ditaa" },
+    { value: "erd", label: "ERD" },
+    { value: "excalidraw", label: "Excalidraw" },
+    { value: "graphviz", label: "Graphviz" },
+    { value: "mermaid", label: "Mermaid" },
+    { value: "nomnoml", label: "Nomnoml" },
+    { value: "nwdiag", label: "NwDiag" },
+    { value: "packetdiag", label: "PacketDiag" },
+    { value: "pikchr", label: "Pikchr" },
+    { value: "plantuml", label: "PlantUML" },
+    { value: "rackdiag", label: "RackDiag" },
+    { value: "seqdiag", label: "SeqDiag" },
+    { value: "structurizr", label: "Structurizr" },
+    { value: "svgbob", label: "SvgBob" },
+    { value: "umlet", label: "UMlet" },
+    { value: "vega", label: "Vega" },
+    { value: "d2", label: "D2" },
+    { value: "dbml", label: "DBML" },
+    { value: "wavedrom", label: "WaveDrom" },
+    { value: "wireviz", label: "WireViz" },
+    { value: "symbolator", label: "Symbolator" },
+
+];
 
 const RENDER_DEBOUNCE_MS = 500;
 
-export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
+export function KrokiPreview({ 
+    definition, 
+    className,
+    diagramType = "auto",
+    onDiagramTypeChange
+}: KrokiPreviewProps) {
     const [copied, setCopied] = useState(false);
     const [loadError, setLoadError] = useState<string | null>(null);
     const [svgMarkup, setSvgMarkup] = useState<string>("");
-    const [rendererLabel, setRendererLabel] = useState<string | null>(null);
+    const [rendererLabel] = useState<string | null>("kroki.io");
     const [isLoading, setIsLoading] = useState(false);
     const [retryNonce, setRetryNonce] = useState(0);
     const [debouncedDefinition, setDebouncedDefinition] = useState(definition);
@@ -40,8 +81,7 @@ export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
     useEffect(() => {
         if (!debouncedDefinition.trim()) {
             setSvgMarkup("");
-            setRendererLabel(null);
-            setLoadError("Provide PlantUML text to render a preview.");
+            setLoadError("Provide diagram definition to render a preview.");
             setIsLoading(false);
             return;
         }
@@ -49,14 +89,24 @@ export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
         const controller = new AbortController();
         setIsLoading(true);
         setLoadError(null);
-        setRendererLabel(null);
 
-        fetch("/api/plantuml/render", {
+        // Prepare the request body
+        let requestBody: any = { definition: debouncedDefinition };
+        
+        // If diagramType is specified and not "auto", add type prefix to definition before sending to renderer
+        if (diagramType && diagramType !== "auto") {
+            requestBody = { 
+                definition: debouncedDefinition, 
+                diagramType: diagramType 
+            };
+        }
+
+        fetch("/api/kroki/render", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ definition: debouncedDefinition }),
+            body: JSON.stringify(requestBody),
             signal: controller.signal,
         })
             .then(async (response) => {
@@ -68,7 +118,6 @@ export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
                     );
                 }
                 setSvgMarkup(payload?.svg ?? payload?.svgDataUrl ?? "");
-                setRendererLabel(payload?.renderer ?? null);
                 setLoadError(null);
             })
             .catch((error) => {
@@ -77,7 +126,7 @@ export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
                 setLoadError(
                     error instanceof Error
                         ? error.message
-                        : "Unable to load PlantUML diagram."
+                        : "Unable to load diagram."
                 );
             })
             .finally(() => {
@@ -89,7 +138,7 @@ export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
         return () => {
             controller.abort();
         };
-    }, [debouncedDefinition, retryNonce]);
+    }, [debouncedDefinition, retryNonce, diagramType]);
 
     useEffect(() => {
         if (!copied) return;
@@ -117,11 +166,11 @@ export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
             const mimeType = parts[0].match(/:(.*?);/)?.[1] || "image/svg+xml";
             const decodedData = atob(parts[1]);
             blob = new Blob([decodedData], { type: mimeType });
-            filename = `plantuml-diagram.${mimeType.split('/')[1] || 'svg'}`;
+            filename = `kroki-diagram.${mimeType.split('/')[1] || 'svg'}`;
         } else {
             // Handle raw SVG string
             blob = new Blob([svgMarkup], { type: "image/svg+xml" });
-            filename = "plantuml-diagram.svg";
+            filename = "kroki-diagram.svg";
         }
         
         const url = URL.createObjectURL(blob);
@@ -140,32 +189,30 @@ export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
                 <div className="flex flex-col items-center justify-center text-center text-sm text-muted-foreground gap-3 p-4">
                     <AlertCircle className="h-5 w-5 text-red-500" />
                     <div className="space-y-1">
-                        <p className="font-medium text-red-600">
-                            Unable to render PlantUML.
-                        </p>
-                        <p>{loadError}</p>
-                        <p className="text-xs">
-                            Ensure the PlantUML renderer (plantuml.com, kroki.io, or a custom
-                            server) is reachable. Configure `PLANTUML_RENDER_BASE` to point to
-                            an internal endpoint if needed.
-                        </p>
+                        <p className="font-medium text-red-600">Rendering failed</p>
+                        <p className="text-xs">{loadError}</p>
                     </div>
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={handleRetry}
-                    >
+                    <Button size="sm" variant="secondary" onClick={handleRetry}>
+                        <RefreshCcw className="h-3 w-3 mr-1" />
                         Retry
                     </Button>
                 </div>
             );
         }
 
+        if (isLoading) {
+            return (
+                <div className="flex flex-col items-center justify-center text-center text-sm text-muted-foreground gap-3 p-4">
+                    <LoaderCircle className="h-5 w-5 animate-spin" />
+                    <p>Rendering diagram...</p>
+                </div>
+            );
+        }
+
         if (!svgMarkup) {
             return (
-                <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
-                    Provide PlantUML text to render a preview.
+                <div className="flex items-center justify-center text-sm text-muted-foreground p-4">
+                    Enter a diagram definition to render
                 </div>
             );
         }
@@ -179,7 +226,7 @@ export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src={svgMarkup}
-                        alt="PlantUML preview"
+                        alt="Kroki preview"
                         className="max-w-full"
                         loading="lazy"
                     />
@@ -194,18 +241,29 @@ export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
                 dangerouslySetInnerHTML={{ __html: svgMarkup }}
             />
         );
-    }, [loadError, svgMarkup, zoom]);
+    }, [loadError, svgMarkup, isLoading, zoom]);
 
     return (
-        <div className="flex flex-col h-full bg-white rounded-lg border shadow-sm overflow-hidden">
+        <div className={cn("flex flex-col h-full bg-white rounded-lg border shadow-sm overflow-hidden", className)}>
             <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/50">
                 <div>
-                    <p className="text-sm font-medium">PlantUML 预览</p>
+                    <p className="text-sm font-medium">Kroki 预览</p>
                     <p className="text-xs text-muted-foreground">
-                        当前 {rendererLabel ?? "使用默认渲染器"}
+                        支持 20+ 图表格式 由 https://kroki.io/ 提供支持
                     </p>
                 </div>
                 <div className="flex gap-2 flex-wrap justify-end items-center">
+                    <select
+                        value={diagramType}
+                        onChange={(e) => onDiagramTypeChange?.(e.target.value)}
+                        className="text-xs border rounded px-2 py-1 bg-white"
+                    >
+                        {DIAGRAM_TYPES.map((type) => (
+                            <option key={type.value} value={type.value}>
+                                {type.label}
+                            </option>
+                        ))}
+                    </select>
                     <Button variant="outline" size="sm" onClick={resetZoom}>
                         <RefreshCcw className="h-4 w-4" />
                     </Button>
@@ -225,19 +283,9 @@ export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
                     </Button>
                 </div>
             </div>
-            <div className="flex-1 p-4 bg-white overflow-auto relative">
-                <div
-                    className={cn(
-                        "absolute inset-x-4 top-4 flex items-center gap-2 text-xs text-muted-foreground transition-opacity pointer-events-none",
-                        isLoading ? "opacity-100" : "opacity-0"
-                    )}
-                >
-                    <LoaderCircle className="h-4 w-4 animate-spin" />
-                    <span>Rendering diagram...</span>
-                </div>
-                <div className={cn(isLoading && "opacity-50 pointer-events-none")}>
-                    {previewContent}
-                </div>
+            
+            <div className="flex-1 overflow-auto bg-white relative">
+                {previewContent}
             </div>
         </div>
     );
