@@ -249,7 +249,7 @@ export function KrokiPreview({
                 <div>
                     <p className="text-sm font-medium">Kroki 预览</p>
                     <p className="text-xs text-muted-foreground">
-                        支持 20+ 图表格式 由 https://kroki.io/ 提供支持
+                        由 <a href="https://kroki.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">https://kroki.io</a> 提供支持
                     </p>
                 </div>
                 <div className="flex gap-2 flex-wrap justify-end items-center">

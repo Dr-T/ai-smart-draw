@@ -202,7 +202,7 @@ export function PlantUMLPreview({ definition }: PlantUMLPreviewProps) {
                 <div>
                     <p className="text-sm font-medium">PlantUML 预览</p>
                     <p className="text-xs text-muted-foreground">
-                        当前 {rendererLabel ?? "使用默认渲染器"}
+                        由 <a href=" https://www.plantuml.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"> https://www.plantuml.com</a> 提供支持
                     </p>
                 </div>
                 <div className="flex gap-2 flex-wrap justify-end items-center">

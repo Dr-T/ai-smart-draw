@@ -69,7 +69,7 @@ export function ExcalidrawSceneCard({ onClear, onHistory, historyDisabled, isCol
                 <div>
                     <p className="text-sm font-medium">Excalidraw 定义</p>
                     <p className="text-xs text-muted-foreground">
-                        可直接编辑 JSON，点击"应用"刷新上方画布
+                        由 <a href="https://excalidraw.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">https://excalidraw.com</a> 提供支持
                     </p>
                 </div>
                 <div className="flex gap-1 flex-wrap items-center">

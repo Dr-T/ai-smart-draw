@@ -206,7 +206,7 @@ export function GraphvizPreview() {
                 <div>
                     <p className="text-sm font-medium">Graphviz 预览</p>
                     <p className="text-xs text-muted-foreground">
-                        由 https://kroki.io/ 提供支持
+                        由 <a href="https://www.graphviz.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">https://www.graphviz.org</a> 提供支持
                     </p>
                 </div>
                 <div className="flex gap-2 flex-wrap justify-end items-center">

@@ -117,7 +117,7 @@ export function MermaidPreview({
                 <div>
                     <p className="text-sm font-medium">Mermaid 预览</p>
                     <p className="text-xs text-muted-foreground">
-                        AI 回复实时渲染
+                        由 <a href="https://mermaid.live" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">https://mermaid.live</a> 提供支持
                     </p>
                 </div>
                 <div className="flex gap-2 flex-wrap justify-end items-center">

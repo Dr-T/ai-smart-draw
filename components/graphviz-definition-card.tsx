@@ -47,7 +47,7 @@ export function GraphvizDefinitionCard({
                 <div>
                     <p className="text-sm font-medium">Graphviz 定义</p>
                     <p className="text-xs text-muted-foreground">
-                        调整代码进行实时预览
+                        由 <a href="https://www.graphviz.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">https://www.graphviz.org</a> 提供支持
                     </p>
                 </div>
                 <div className="flex gap-1 items-center">
