@@ -8,30 +8,93 @@ import React, {
     useState,
 } from "react";
 
-const DEFAULT_DEFINITION = `graph TD
-    Start(["开始订单流程"]) --> CreateOrder[创建订单]
-    CreateOrder --> CheckStock{检查库存}
-    CheckStock -- 有库存 --> Payment[支付订单]
-    CheckStock -- 缺货 --> Notify[通知缺货]
-    Notify --> Cancel[取消订单]
-    Payment --> ProcessPayment{支付成功?}
-    ProcessPayment -- 成功 --> Ship[安排发货]
-    ProcessPayment -- 失败 --> Retry[重试支付]
-    Retry --> ProcessPayment
-    Ship --> Deliver[配送商品]
-    Deliver --> Confirm[确认收货]
-    Confirm --> Complete([订单完成])
-    Cancel --> End([流程结束])
-    Complete --> End
-
-    %% 样式定义
-    classDef startEnd fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    classDef process fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
-    classDef decision fill:#fff3e0,stroke:#e65100,stroke-width:2px
+const DEFAULT_DEFINITION = `graph TB
+    %% ===== 房顶部分：用户接入层 =====
+    Web[🌐 Web界面]:::roof
+    App[📱 移动App]:::roof
+    API[🔌 API接口]:::roof
     
-    class Start,End startEnd
-    class CreateOrder,Payment,Notify,Ship,Deliver,Confirm,Retry process
-    class CheckStock,ProcessPayment decision
+    %% ===== 房顶装饰 =====
+    Roof1[╱]:::roofDec
+    Roof2[╲]:::roofDec
+    
+    %% ===== 二层：AI服务层（主卧室） =====
+    subgraph "🏠 AI服务层"
+        LLM[🧠 大语言模型<br/>GPT/LLaMA]:::aiService
+        Agent[🤖 智能体框架<br/>LangChain]:::aiService
+    end
+    
+    %% ===== 三层：数据处理层（客厅） =====
+    subgraph "📊 数据处理层"
+        VectorDB[🗃️ 向量数据库<br/>Pinecone]:::data
+        RAG[🔍 RAG检索]:::data
+    end
+    
+    %% ===== 四层：模型层（书房） =====
+    subgraph "📚 模型管理层"
+        ModelHub[🔄 模型仓库<br/>HuggingFace]:::model
+        FineTune[🎯 模型微调]:::model
+    end
+    
+    %% ===== 底层：基础设施（地基） =====
+    subgraph "⚡ 基础设施层"
+        GPU[🎮 GPU集群]:::infra
+        K8S[🐳 Kubernetes]:::infra
+    end
+    
+    %% ===== 左右窗户：监控评估 =====
+    PromptStudio[💡 Prompt工作室]:::window
+    Eval[📈 模型评估]:::window
+    
+    %% ===== 烟囱：外部数据 =====
+    External[🌐 外部数据源]:::chimney
+    
+    %% ===== 房屋结构连接 =====
+    %% 房顶
+    Web --> Roof1
+    App --> Roof1
+    API --> Roof2
+    Roof1 --> LLM
+    Roof2 --> LLM
+    
+    %% 楼层连接
+    LLM --> Agent
+    Agent --> VectorDB
+    Agent --> RAG
+    VectorDB --> ModelHub
+    RAG --> ModelHub
+    ModelHub --> FineTune
+    FineTune --> GPU
+    FineTune --> K8S
+    
+    %% 窗户连接
+    LLM --> PromptStudio
+    LLM --> Eval
+    
+    %% 烟囱连接
+    External --> VectorDB
+    External --> ModelHub
+    
+    %% ===== 样式定义 =====
+    classDef roof fill:#ff6b6b,stroke:#c44569,stroke-width:3px,color:white
+    classDef roofDec fill:#ff6b6b,stroke:#c44569,stroke-width:1px,color:white
+    classDef aiService fill:#74b9ff,stroke:#0984e3,stroke-width:2px,color:white
+    classDef data fill:#55efc4,stroke:#00b894,stroke-width:2px,color:black
+    classDef model fill:#ffeaa7,stroke:#fdcb6e,stroke-width:2px,color:black
+    classDef infra fill:#dfe6e9,stroke:#b2bec3,stroke-width:2px,color:black
+    classDef window fill:#a29bfe,stroke:#6c5ce7,stroke-width:2px,color:white
+    classDef chimney fill:#636e72,stroke:#2d3436,stroke-width:2px,color:white
+
+    %% ===== 房屋装饰元素 =====
+    %% 门
+    Door[🚪 MLOps平台]:::infra
+    K8S --> Door
+    
+    %% 花园
+    Garden1[🌱 数据清洗]:::window
+    Garden2[🌿 文档处理]:::window
+    VectorDB --> Garden1
+    RAG --> Garden2
 `;
 
 export interface MermaidHistoryEntry {

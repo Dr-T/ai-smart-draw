@@ -20,7 +20,7 @@ export function MermaidPreview({
 
     const [zoom, setZoom] = useState(1);
     const [showGrid, setShowGrid] = useState(true);
-    const [handDrawn, setHandDrawn] = useState(true);
+    const [handDrawn, setHandDrawn] = useState(false);
     const [isResetting, setIsResetting] = useState(false);
 
     const diagramId = useMemo(
