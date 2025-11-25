@@ -24,6 +24,29 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
+const baseUrlPresets = [
+    { label: "OpenAI", value: "https://api.openai.com/v1" },
+    { label: "DeepSeek", value: "https://api.deepseek.com/v1" },
+    { label: "Moonshot (Kimi)", value: "https://api.moonshot.cn/v1" },
+    { label: "Groq", value: "https://api.groq.com/openai/v1" },
+    { label: "SiliconFlow", value: "https://api.siliconflow.cn/v1" },
+    { label: "OpenRouter", value: "https://openrouter.ai/api/v1" },
+    { label: "零一万物", value: "https://api.lingyiwanwu.com/v1" },
+    { label: "智谱AI", value: "https://open.bigmodel.cn/api/paas/v4" },
+    { label: "通义千问", value: "https://dashscope.aliyuncs.com/compatible-mode/v1" },
+    { label: "百度千帆", value: "https://qianfan.baidubce.com/v2" },
+    { label: "讯飞星火", value: "https://spark-api-open.xf-yun.com/v1" },
+    { label: "腾讯混元", value: "https://hunyuan.tencentcloudapi.com" },
+    { label: "Anthropic Claude", value: "https://api.anthropic.com/v1" },
+    { label: "Google Gemini", value: "https://generativelanguage.googleapis.com/v1beta" },
+    { label: "Together AI", value: "https://api.together.xyz/v1" },
+    { label: "Perplexity", value: "https://api.perplexity.ai" },
+    { label: "Mistral AI", value: "https://api.mistral.ai/v1" },
+    { label: "Cohere", value: "https://api.cohere.ai/v1" },
+    { label: "Hugging Face", value: "https://api-inference.huggingface.co" },
+    { label: "自定义", value: "https://api.custom.ai/v1" },
+];
+
 interface ModelConfigDialogProps {
     className?: string;
     buttonVariant?: "outline" | "ghost";
@@ -191,6 +214,7 @@ export function ModelConfigDialog({
                     </div>
 
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+
                         <label className="text-sm space-y-1">
                             <span className="block font-medium">API Key</span>
                             <Input
@@ -198,16 +222,45 @@ export function ModelConfigDialog({
                                 type="password"
                                 placeholder="留空使用后端环境变量"
                                 onChange={(e) => handleFieldChange("apiKey", e.target.value)}
+                                className="w-full"
                             />
                         </label>
 
-                        <label className="text-sm space-y-1">
+                        <label className="text-sm space-y-1 sm:col-span-2">
                             <span className="block font-medium">Base URL</span>
-                            <Input
-                                value={draft.baseUrl ?? ""}
-                                placeholder="https://api.openai.com/v1"
-                                onChange={(e) => handleFieldChange("baseUrl", e.target.value)}
-                            />
+                            <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.4fr] gap-2">
+                                <Select
+                                    value={
+                                        baseUrlPresets.find((p) => p.value === (draft.baseUrl || ""))?.value ||
+                                        (draft.baseUrl ? "custom" : "https://api.openai.com/v1")
+                                    }
+                                    onValueChange={(val) => {
+                                        if (val !== "custom") {
+                                            handleFieldChange("baseUrl", val);
+                                        }
+                                    }}
+                                >
+                                    <SelectTrigger className="h-8 w-63 text-sm">
+                                        <SelectValue placeholder="选择常用地址" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {baseUrlPresets.map((preset) => (
+                                            <SelectItem key={preset.value} value={preset.value}>
+                                                {preset.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <Input
+                                    className="w-full"
+                                    value={draft.baseUrl ?? ""}
+                                    placeholder="https://api.openai.com/v1"
+                                    onChange={(e) => handleFieldChange("baseUrl", e.target.value)}
+                                />
+                            </div>
+                            <span className="text-[11px] text-muted-foreground">
+                                先选常用网关，必要时在右侧输入框微调或填自定义代理地址。
+                            </span>
                         </label>
 
                         <label className="text-sm space-y-1">
