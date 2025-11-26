@@ -3,7 +3,16 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {ClipboardCopy, ClipboardCheck, RefreshCcw, ChevronsDown, ChevronsUp, Copy} from "lucide-react";
+import {
+    ClipboardCopy,
+    ClipboardCheck,
+    RefreshCcw,
+    ChevronsDown,
+    ChevronsUp,
+    Copy,
+    BookCopy,
+    CopySlash, CopyX, CopyMinus, AlarmClockCheck, Airplay
+} from "lucide-react";
 import { useExcalidraw } from "@/contexts/excalidraw-context";
 import {copyToClipboard} from "@/components/plantuml-definition-card";
 import { cn } from "@/lib/utils";
@@ -123,7 +132,9 @@ export function ExcalidrawSceneCard({ onClear, onHistory, historyDisabled, isCol
                         disabled={!draft}
                     >
                         {copied ? (
-                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
                         ) : (
                             <Copy className="h-4 w-4" />
                         )}
@@ -137,10 +148,8 @@ export function ExcalidrawSceneCard({ onClear, onHistory, historyDisabled, isCol
                         disabled={historyDisabled}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                            <path d="M3 3v5h5"/>
-                            <path d="M12 7v5l4 2"/>
-                            <path d="M16 21a9 9 0 1 0-9-9"/>
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
                         </svg>
                     </Button>
                     <Button
