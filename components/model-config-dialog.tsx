@@ -48,7 +48,7 @@ const baseUrlPresets = [
     { label: "LM Studio", value: "http://localhost:1234/v1" },
     { label: "Jan AI", value: "http://localhost:1337/v1" },
     { label: "OpenWebUI", value: "http://localhost:3000/ollama/api" },
-    { label: "更多...", value: "https://api.custom.ai/v1" },
+    { label: "自定义", value: "http://" },
 ];
 
 interface ModelConfigDialogProps {
@@ -156,9 +156,9 @@ export function ModelConfigDialog({
             </DialogTrigger>
             <DialogContent className="sm:max-w-xl">
                 <DialogHeader>
-                    <DialogTitle>模型设置（OpenAI 协议）</DialogTitle>
+                    <DialogTitle>模型设置</DialogTitle>
                     <DialogDescription>
-                        保存到本地浏览器，仅当前设备可见。为空时将使用后端默认 OpenAI 环境变量。
+                        保存到本地浏览器，仅当前设备可见。为空时将使用.env环境变量。
                     </DialogDescription>
                 </DialogHeader>
 
@@ -202,54 +202,50 @@ export function ModelConfigDialog({
                                 删除
                             </Button>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <label className="text-sm space-y-1">
-                                <span className="block font-medium">配置名称</span>
-                                <Input
-                                    value={activeProfile?.name || ""}
-                                    placeholder="如：公司代理 / 个人账号"
-                                    onChange={(e) => renameProfile(activeProfileId, e.target.value)}
-                                />
-                            </label>
-                            <div className="text-xs text-muted-foreground self-end">
-                                选择或管理不同模型账号/网关，快速切换。
-                            </div>
-                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-
                         <label className="text-sm space-y-1">
-                            <span className="block font-medium">API Key</span>
-                            <Input
-                                value={draft.apiKey ?? ""}
-                                type="password"
-                                placeholder="留空使用后端环境变量"
-                                onChange={(e) => handleFieldChange("apiKey", e.target.value)}
-                                className="w-full"
-                            />
+                            <label className="text-sm">
+                                <span className="block font-medium">配置名称</span>
+                                <Input
+                                    value={activeProfile?.name || ""}
+                                    placeholder="配置名称"
+                                    onChange={(e) => renameProfile(activeProfileId, e.target.value)}
+                                />
+                            </label>
+                        </label>
+                        <label className="text-sm space-y-1">
+                            <label className="text-sm">
+                                <span className="block font-medium">API Key</span>
+                                <Input
+                                    value={draft.apiKey ?? ""}
+                                    type="password"
+                                    placeholder="sk- …… "
+                                    onChange={(e) => handleFieldChange("apiKey", e.target.value)}
+                                    className="w-full"
+                                />
+                            </label>
                         </label>
 
-                        <label className="text-sm space-y-1 sm:col-span-2">
+                        <label className="text-sm space-y-1 sm:col-span-2 flex flex-col gap-2 rounded-md border p-3 bg-muted/40">
                             <span className="block font-medium">Base URL</span>
                             <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.4fr] gap-2">
                                 <Select
                                     value={
                                         baseUrlPresets.find((p) => p.value === (draft.baseUrl || ""))?.value ||
-                                        (draft.baseUrl ? "custom" : "https://api.openai.com/v1")
+                                        (draft.baseUrl ? "" : "https://api.openai.com/v1")
                                     }
                                     onValueChange={(val) => {
-                                        if (val !== "custom") {
-                                            handleFieldChange("baseUrl", val);
-                                        }
+                                        handleFieldChange("baseUrl", val);
                                     }}
                                 >
                                     <SelectTrigger className="h-8 w-63 text-sm">
-                                        <SelectValue placeholder="选择常用地址" />
+                                        <SelectValue placeholder="自定义" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {baseUrlPresets.map((preset) => (
-                                            <SelectItem key={preset.value} value={preset.value}>
+                                            <SelectItem key={preset.value || "custom"} value={preset.value}>
                                                 {preset.label}
                                             </SelectItem>
                                         ))}
